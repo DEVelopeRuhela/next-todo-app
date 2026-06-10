@@ -36,7 +36,7 @@ export function TodoList({
           onDelete={() => onDelete(t.id)}
         />
       ))}
-      <div>{search}</div>
+    
     </ul>
     
   );
