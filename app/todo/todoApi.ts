@@ -14,7 +14,7 @@ export async function listTodos(): Promise<Todo[]> {
   return todos;
 }
 
-export async function addTodo(text: string): Promise<Todo> {
+export async function addTodo(text: string, priority: string): Promise<Todo> {
   const trimmed = text.trim();
   if (!trimmed) throw new Error("Todo text is empty");
 
@@ -24,6 +24,7 @@ export async function addTodo(text: string): Promise<Todo> {
     text: trimmed,
     completed: false,
     createdAt: Date.now(),
+    priority: priority,
   };
   const next = [todo, ...todos];
   saveTodosToStorage(next);

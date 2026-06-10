@@ -42,7 +42,7 @@ export default function TodoApp() {
         
 
         <TodoInput
-          onAdd={(text: string) => addTodo.mutate(text)}
+          onAdd={(text: string, priority: string) => addTodo.mutate({text, priority})}
           disabled={addTodo.isPending}
         />
 

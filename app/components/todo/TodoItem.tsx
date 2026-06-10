@@ -46,16 +46,25 @@ export function TodoItem({
           )}
         </div>
       </button>
-
-      <button
+      <div className="flex flex-row align-center justify-center ">
+        <div className={`text-xs font-light border rounded-lg px-2 py-0.5 mr-2 self-center ${
+          todo.priority === "High" ? "bg-red-100 text-red-600 border-red-200" :
+          todo.priority === "Medium" ? "bg-yellow-100 text-yellow-600 border-yellow-200" :
+          "bg-green-100 text-green-600 border-green-200"
+        }`}>
+          {todo.priority}
+        </div>
+        <button
         type="button"
         onClick={onDelete}
-        className="rounded-md px-2 py-1 text-sm text-zinc-600 hover:bg-red-100 hover:text-red-900"
+        className="rounded-full p-2 text-sm text-zinc-600 hover:bg-red-100 hover:text-red-900"
 
         aria-label="Delete todo"
       >
        <Trash2 className="h-4 w-4" />
       </button>
+      </div>
+      
     </li>
   );
 }

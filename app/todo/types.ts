@@ -6,6 +6,7 @@ export type Todo = {
   completed: boolean;
   createdAt: number; 
   completedAt?: number;
+  priority: string;
 };
 
 export type TodoFilter = "all" | "active" | "completed";
