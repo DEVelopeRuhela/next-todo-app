@@ -22,7 +22,7 @@ export function TodoItem({
       >
         <span
           className={
-            "inline-flex h-5 w-5 items-center justify-center rounded border  " +
+            "inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded border  " +
             (todo.completed
               ? "border-emerald-600 bg-emerald-600 text-white"
               : "border-zinc-300 hover:bg-gray-100 text-transparent")
@@ -30,15 +30,21 @@ export function TodoItem({
         >
           ✓
         </span>
-        <span
-          className={
-            "text-sm " +
-            (todo.completed ? "text-zinc-500 line-through" : "text-zinc-900")
-
-          }
-        >
-          {todo.text}
-        </span>
+        <div className="flex flex-col">
+          <span
+            className={
+              "text-md " +
+              (todo.completed ? "text-zinc-500 line-through" : "text-zinc-900")
+            }
+          >
+            {todo.text}
+          </span>
+          {todo.completed && todo.completedAt && (
+            <span className="text-xs text-green-900 mt-0.5 italic font-light">
+              Completed at: {new Date(todo.completedAt).toLocaleString()}
+            </span>
+          )}
+        </div>
       </button>
 
       <button

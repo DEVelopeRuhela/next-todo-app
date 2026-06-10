@@ -17,6 +17,7 @@ export function loadTodosFromStorage(): Todo[] {
         text: t.text,
         completed: Boolean(t.completed),
         createdAt: typeof t.createdAt === "number" ? t.createdAt : Date.now(),
+        completedAt: typeof t.completedAt === "number" ? t.completedAt : undefined,
       }));
   } catch {
     return [];

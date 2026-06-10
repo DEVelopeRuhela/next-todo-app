@@ -5,6 +5,7 @@ export type Todo = {
   text: string;
   completed: boolean;
   createdAt: number; 
+  completedAt?: number;
 };
 
 export type TodoFilter = "all" | "active" | "completed";

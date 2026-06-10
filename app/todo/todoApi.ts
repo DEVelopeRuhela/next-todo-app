@@ -9,7 +9,9 @@ function createId(): TodoId {
 }
 
 export async function listTodos(): Promise<Todo[]> {
-  return loadTodosFromStorage();
+  const todos : Todo[] = loadTodosFromStorage();
+  console.log(todos);
+  return todos;
 }
 
 export async function addTodo(text: string): Promise<Todo> {
@@ -33,7 +35,12 @@ export async function toggleTodo(id: TodoId): Promise<Todo> {
   const idx = todos.findIndex((t) => t.id === id);
   if (idx === -1) throw new Error("Todo not found");
 
-  const updated: Todo = { ...todos[idx], completed: !todos[idx].completed };
+  const isCompleted = !todos[idx].completed;
+  const updated: Todo = { 
+    ...todos[idx], 
+    completed: isCompleted,
+    completedAt: isCompleted ? Date.now() : undefined
+  };
   const next = [...todos];
   next[idx] = updated;
   saveTodosToStorage(next);
