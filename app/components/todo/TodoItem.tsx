@@ -1,7 +1,8 @@
 "use client";
 
 import type { Todo } from "../../todo/types";
-import { CheckCircle2, Circle, Trash2 } from "lucide-react";
+import { CheckCircle2, Circle, Trash2, Calendar, Clock, AlertCircle } from "lucide-react";
+
 export function TodoItem({
   todo,
   onToggle,
@@ -16,76 +17,88 @@ export function TodoItem({
   showTarget: boolean;
 }) {
   return (
-    <li className={`flex items-center justify-between gap-3 rounded-lg ${todo.isDelayed ? 'bg-red-100 border-red-200 border' : 'bg-white border '} px-3 py-2`}>
+    <li className={`group flex items-start sm:items-center justify-between gap-3 rounded-xl border px-4 py-3 transition-all ${
+      todo.isDelayed && !todo.completed
+        ? 'bg-red-50/50 border-red-200 shadow-sm' 
+        : 'bg-white border-zinc-200 hover:border-zinc-300 hover:shadow-sm'
+    }`}>
 
-      <button
-        type="button"
-        onClick={onToggle}
-        className="flex items-center gap-3 text-left"
-        aria-label={todo.completed ? "Mark as active" : "Mark as completed"}
-      >
-        <span
-          className={
-            "inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded border  " +
-            (todo.completed
-              ? "border-emerald-600 bg-emerald-600 text-white"
-              : "border-zinc-300 hover:bg-gray-100 text-transparent")
-          }
+      <div className="flex items-start sm:items-center gap-3 flex-1 min-w-0">
+        <button
+          type="button"
+          onClick={onToggle}
+          className="mt-0.5 sm:mt-0 flex-shrink-0"
+          aria-label={todo.completed ? "Mark as active" : "Mark as completed"}
         >
-          ✓
-        </span>
-        <div className="flex flex-col">
           <span
-            className={
-              "text-md " +
-              (todo.completed ? "text-zinc-500 line-through" : "text-zinc-900")
-            }
+            className={`inline-flex h-5 w-5 items-center justify-center rounded border transition-colors ${
+              todo.completed
+                ? "border-emerald-500 bg-emerald-500 text-white"
+                : todo.isDelayed
+                ? "border-red-300 bg-red-50/50 text-transparent hover:bg-red-100"
+                : "border-zinc-300 text-transparent hover:bg-zinc-100"
+            }`}
+          >
+            ✓
+          </span>
+        </button>
+        
+        <div className="flex flex-col gap-1 min-w-0">
+          <span
+            onClick={onToggle}
+            className={`text-sm sm:text-base font-medium transition-colors cursor-pointer truncate ${
+              todo.completed ? "text-zinc-400 line-through" : todo.isDelayed ? "text-red-900" : "text-zinc-700"
+            }`}
           >
             {todo.text}
           </span>
-          {todo.completed && todo.completedAt && showCompleted && (
-            <span className="text-xs text-green-900 mt-0.5 italic font-light">
-              Completed at: {new Date(todo.completedAt).toLocaleString()}
-              {todo.isDelayed && (
-                <span className="text-xs text-red-700 mt-0.5 ml-2 font-light">
-                  ( Delayed )
-                </span>
-              )}
-            </span>
-          )}
-          {todo.targetDate && !todo.completed && showTarget && !todo.isDelayed&& (
-            <span className="text-xs text-blue-700 mt-0.5 font-light flex gap-2">
-              <span className="font-normal">Complete by:</span> {new Date(todo.targetDate).toLocaleString().slice(0, 10) } , {todo.targetTime }
-            </span>
-          )}
-          {todo.isDelayed && !todo.completed && (
-            <span className="text-xs text-red-700 mt-0.5 font-light">
-              Delayed
-            </span>
-          )}
+          
+          <div className="flex flex-wrap items-center gap-3">
+            {todo.completed && todo.completedAt && showCompleted && (
+              <span className="flex items-center gap-1 text-xs text-emerald-600 font-medium">
+                <CheckCircle2 className="w-3.5 h-3.5" />
+                Completed: {new Date(todo.completedAt).toLocaleDateString()}
+                {todo.isDelayed && (
+                  <span className="text-red-500 ml-1">(Late)</span>
+                )}
+              </span>
+            )}
+
+            {!todo.completed && showTarget && todo.targetDate && (
+              <span className={`flex items-center gap-1 text-xs font-medium ${todo.isDelayed ? 'text-red-600' : 'text-blue-600'}`}>
+                {todo.isDelayed ? <AlertCircle className="w-3.5 h-3.5" /> : <Calendar className="w-3.5 h-3.5" />}
+                {todo.isDelayed ? "Delayed" : "Due"}: {new Date(todo.targetDate).toLocaleDateString()}
+                {todo.targetTime && (
+                  <>
+                    <Clock className="w-3 h-3 ml-1" />
+                    {todo.targetTime}
+                  </>
+                )}
+              </span>
+            )}
+          </div>
         </div>
-      </button>
-      <div className="flex flex-row align-center justify-center ">
+      </div>
+
+      <div className="flex items-center gap-2 opacity-100 sm:opacity-80 group-hover:opacity-100 transition-opacity ml-2 flex-shrink-0">
         {showCompleted && (
-        <div className={`text-xs font-light border rounded-lg px-2 py-0.5 mr-2 self-center ${
-          todo.priority === "High" ? "bg-red-100 text-red-600 border-red-200" :
-          todo.priority === "Medium" ? "bg-yellow-100 text-yellow-600 border-yellow-200" :
-          "bg-green-100 text-green-600 border-green-200"
-        }`}>
-          {todo.priority}
-        </div>
+          <div className={`text-[10px] uppercase tracking-wider font-bold border rounded-md px-2 py-1 ${
+            todo.priority === "High" ? "bg-red-50 text-red-700 border-red-200" :
+            todo.priority === "Medium" ? "bg-amber-50 text-amber-700 border-amber-200" :
+            "bg-emerald-50 text-emerald-700 border-emerald-200"
+          }`}>
+            {todo.priority}
+          </div>
         )}
         <button
-        type="button"
-        onClick={onDelete}
-        className="rounded-full p-2 text-sm text-zinc-600 hover:bg-red-100 hover:text-red-900"
-
-        aria-label="Delete todo"
-      >
-       <Trash2 className="h-4 w-4" />
-      </button>
+          type="button"
+          onClick={onDelete}
+          className="rounded-full p-2 text-zinc-400 hover:bg-red-50 hover:text-red-600 transition-colors"
+          aria-label="Delete todo"
+        >
+          <Trash2 className="h-4 w-4" />
+        </button>
       </div>
-      
     </li>
   );
 }
