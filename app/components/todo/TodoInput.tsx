@@ -5,9 +5,11 @@ import toast from "react-hot-toast";
 
 
 export const TodoInput = ({
+  checkDelay,
   onAdd,
   disabled,
 }: {
+  checkDelay: () => Promise<void>;
   onAdd: (text: string, priority: string, targetDate:string, targetTime:string ) => Promise<void>;
   disabled?: boolean;
 }) => {

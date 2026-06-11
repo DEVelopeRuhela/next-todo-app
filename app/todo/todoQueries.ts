@@ -2,7 +2,7 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { Todo, TodoFilter, TodoId } from "./types";
-import { addTodo, clearCompleted, deleteTodo, listTodos, toggleTodo } from "./todoApi";
+import { addTodo, clearCompleted, deleteTodo, listTodos, toggleTodo, updateIsDelayed } from "./todoApi";
 
 export const todoQueryKeys = {
   all: () => ["todos"] as const,
@@ -71,3 +71,15 @@ export function applyFilter( todos: Todo[], filter: TodoFilter, search:String): 
   }
 }
 
+
+export function useIsDelayed() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: () => updateIsDelayed(),
+    onSuccess: (hasChanges) => {
+      if (hasChanges) {
+        queryClient.invalidateQueries({ queryKey: todoQueryKeys.all() });
+      }
+    }, 
+  });
+}

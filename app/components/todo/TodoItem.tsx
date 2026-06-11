@@ -6,15 +6,17 @@ export function TodoItem({
   todo,
   onToggle,
   onDelete,
-  showCompleted
+  showCompleted,
+  showTarget
 }: {
   todo: Todo;
   onToggle: () => void;
   onDelete: () => void;
   showCompleted: boolean;
+  showTarget: boolean;
 }) {
   return (
-    <li className="flex items-center justify-between gap-3 rounded-lg border bg-white px-3 py-2">
+    <li className={`flex items-center justify-between gap-3 rounded-lg ${todo.isDelayed ? 'bg-red-100 border-red-200 border' : 'bg-white border '} px-3 py-2`}>
 
       <button
         type="button"
@@ -44,6 +46,21 @@ export function TodoItem({
           {todo.completed && todo.completedAt && showCompleted && (
             <span className="text-xs text-green-900 mt-0.5 italic font-light">
               Completed at: {new Date(todo.completedAt).toLocaleString()}
+              {todo.isDelayed && (
+                <span className="text-xs text-red-700 mt-0.5 ml-2 font-light">
+                  ( Delayed )
+                </span>
+              )}
+            </span>
+          )}
+          {todo.targetDate && !todo.completed && showTarget && !todo.isDelayed&& (
+            <span className="text-xs text-blue-700 mt-0.5 font-light flex gap-2">
+              <span className="font-normal">Complete by:</span> {new Date(todo.targetDate).toLocaleString().slice(0, 10) } , {todo.targetTime }
+            </span>
+          )}
+          {todo.isDelayed && !todo.completed && (
+            <span className="text-xs text-red-700 mt-0.5 font-light">
+              Delayed
             </span>
           )}
         </div>

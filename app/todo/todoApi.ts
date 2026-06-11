@@ -31,6 +31,7 @@ export async function addTodo(text: string, priority: string, targetDate:string,
     priority: priority,
     targetDate: targetDate,
     targetTime: targetTime,
+    isDelayed: false,
   };
   const next = [todo, ...todos];
   saveTodosToStorage(next);
@@ -70,6 +71,26 @@ export async function clearCompleted(): Promise<number> {
   return before - next.length;
 }
 
+
+export async function updateIsDelayed(): Promise<boolean> {
+  const todos = loadTodosFromStorage();
+  const now = new Date();
+  let count = 0;
+  for(const t of todos) {
+    if(!t.completed && t.targetDate && t.targetTime && !t.isDelayed) {
+      const targetDateTime = new Date(t.targetDate + " " + t.targetTime);
+      if(targetDateTime < now) {
+        t.isDelayed = true;
+        count++;
+      }
+    }
+  }
+  if (count > 0) {
+    saveTodosToStorage(todos);
+  }
+  console.log(todos)
+  return count > 0;
+}
 
 
 

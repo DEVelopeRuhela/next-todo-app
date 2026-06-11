@@ -1,8 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import type { TodoFilter } from "../../todo/types";
-import { applyFilter } from "../../todo/todoQueries";
+import { applyFilter, useIsDelayed } from "../../todo/todoQueries";
 import { useAddTodo, useClearCompleted, useDeleteTodo, useTodos, useToggleTodo } from "../../todo/todoQueries";
 import { TodoInput } from "./TodoInput";
 import { TodoList } from "./TodoList";
@@ -24,7 +24,15 @@ export default function TodoApp() {
   const toggleTodo = useToggleTodo();
   const deleteTodo = useDeleteTodo();
   const clearCompleted = useClearCompleted();
+  const checkDelay = useIsDelayed();
 
+  useEffect(() => {
+    checkDelay.mutate();
+    const interval = setInterval(() => {
+      checkDelay.mutate();
+    }, 15000); 
+    return () => clearInterval(interval);
+  }, []); 
   const filteredTodos = useMemo(() => applyFilter(todos, filter, search), [todos, filter, search]);
 
   return (
@@ -68,6 +76,7 @@ export default function TodoApp() {
         
         <div className={viewMode === "matrix" ? "max-w-xl mx-auto" : ""}>
           <TodoInput
+            checkDelay={async () => { await checkDelay.mutateAsync(); }}
             onAdd={async (text: string, priority: string, targetDate:string, targetTime:string) => {
               await addTodo.mutateAsync({text, priority, targetDate, targetTime});
             }}

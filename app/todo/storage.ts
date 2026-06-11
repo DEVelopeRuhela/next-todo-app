@@ -21,6 +21,7 @@ export function loadTodosFromStorage(): Todo[] {
         priority: t.priority,
         targetDate: t.targetDate,
         targetTime: t.targetTime,
+        isDelayed: t.isDelayed,
       }));
   } catch {
     return [];

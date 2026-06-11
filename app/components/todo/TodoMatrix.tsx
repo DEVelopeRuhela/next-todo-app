@@ -45,6 +45,7 @@ export function TodoMatrix({
               onToggle={() => onToggle(t.id)}
               onDelete={() => onDelete(t.id)}
               showCompleted = {false}
+              showTarget = {false}
             />
           ))
         )}

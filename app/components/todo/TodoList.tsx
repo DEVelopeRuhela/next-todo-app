@@ -35,6 +35,7 @@ export function TodoList({
           onToggle={() => onToggle(t.id)}
           onDelete={() => onDelete(t.id)}
           showCompleted = {true}
+          showTarget = {true}
         />
       ))}
     
