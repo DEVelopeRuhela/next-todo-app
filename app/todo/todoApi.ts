@@ -14,10 +14,14 @@ export async function listTodos(): Promise<Todo[]> {
   return todos;
 }
 
-export async function addTodo(text: string, priority: string): Promise<Todo> {
+export async function addTodo(text: string, priority: string, targetDate:string, targetTime: string): Promise<Todo> {
   const trimmed = text.trim();
+  console.log(targetDate,targetTime)
   if (!trimmed) throw new Error("Todo text is empty");
-
+  
+  if((!targetDate) && (!targetTime)) throw new Error("Please mention target date and time");
+  if((targetDate) && (!targetTime)) throw new Error("Target Time is required");
+  if((!targetDate) && (targetTime)) throw new Error("Target Date is required");
   const todos = loadTodosFromStorage();
   const todo: Todo = {
     id: createId(),
@@ -25,6 +29,8 @@ export async function addTodo(text: string, priority: string): Promise<Todo> {
     completed: false,
     createdAt: Date.now(),
     priority: priority,
+    targetDate: targetDate,
+    targetTime: targetTime,
   };
   const next = [todo, ...todos];
   saveTodosToStorage(next);

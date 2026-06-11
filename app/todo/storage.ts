@@ -19,6 +19,8 @@ export function loadTodosFromStorage(): Todo[] {
         createdAt: typeof t.createdAt === "number" ? t.createdAt : Date.now(),
         completedAt: typeof t.completedAt === "number" ? t.completedAt : undefined,
         priority: t.priority,
+        targetDate: t.targetDate,
+        targetTime: t.targetTime,
       }));
   } catch {
     return [];

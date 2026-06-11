@@ -7,6 +7,8 @@ export type Todo = {
   createdAt: number; 
   completedAt?: number;
   priority: string;
+  targetDate: string;
+  targetTime: string;
 };
 
 export type TodoFilter = "all" | "active" | "completed";

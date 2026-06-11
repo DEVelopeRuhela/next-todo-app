@@ -68,7 +68,9 @@ export default function TodoApp() {
         
         <div className={viewMode === "matrix" ? "max-w-xl mx-auto" : ""}>
           <TodoInput
-            onAdd={(text: string, priority: string) => addTodo.mutate({text, priority})}
+            onAdd={async (text: string, priority: string, targetDate:string, targetTime:string) => {
+              await addTodo.mutateAsync({text, priority, targetDate, targetTime});
+            }}
             disabled={addTodo.isPending}
           />
         </div>

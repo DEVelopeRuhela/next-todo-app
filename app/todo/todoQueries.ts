@@ -20,7 +20,7 @@ export function useTodos() {
 export function useAddTodo() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data : {text: string, priority: string}) => addTodo(data.text, data.priority),
+    mutationFn: (data : {text: string, priority: string, targetDate: string, targetTime: string}) => addTodo(data.text, data.priority, data.targetDate, data.targetTime),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: todoQueryKeys.all() });
     },
