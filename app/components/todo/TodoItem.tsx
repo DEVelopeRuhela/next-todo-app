@@ -49,6 +49,7 @@ export function TodoItem({
         </div>
       </button>
       <div className="flex flex-row align-center justify-center ">
+        {showCompleted && (
         <div className={`text-xs font-light border rounded-lg px-2 py-0.5 mr-2 self-center ${
           todo.priority === "High" ? "bg-red-100 text-red-600 border-red-200" :
           todo.priority === "Medium" ? "bg-yellow-100 text-yellow-600 border-yellow-200" :
@@ -56,6 +57,7 @@ export function TodoItem({
         }`}>
           {todo.priority}
         </div>
+        )}
         <button
         type="button"
         onClick={onDelete}
