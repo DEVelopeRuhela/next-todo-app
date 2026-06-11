@@ -2,7 +2,7 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { Todo, TodoFilter, TodoId } from "./types";
-import { addTodo, clearCompleted, deleteTodo, listTodos, toggleTodo, updateIsDelayed } from "./todoApi";
+import { addTodo, clearCompleted, deleteTodo, listTodos, toggleTodo, updateIsDelayed, updateTimeline, toggleTimelineSubtask } from "./todoApi";
 
 export const todoQueryKeys = {
   all: () => ["todos"] as const,
@@ -83,3 +83,26 @@ export function useIsDelayed() {
     }, 
   });
 }
+
+export function useUpdateTimeline() {
+  const queryClient = useQueryClient();
+  return useMutation( {
+    mutationFn: (data : {id: string, timeline: string}) => updateTimeline(data.id, data.timeline),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: todoQueryKeys.all() });
+    },
+  })
+}
+
+export function useToggleSubtask () {
+  const queryClient = useQueryClient();
+  return useMutation( {
+    mutationFn: (data: {id: string, subtaskIndex: number}) => toggleTimelineSubtask(data.id, data.subtaskIndex),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: todoQueryKeys.all() });
+    },
+  })
+}
+
+
+

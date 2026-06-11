@@ -92,5 +92,41 @@ export async function updateIsDelayed(): Promise<boolean> {
   return count > 0;
 }
 
+export async function updateTimeline(id: string, timeline: string): Promise<void> {
+  const todos = loadTodosFromStorage();
+  const idx = todos.findIndex((t) => t.id === id);
+  if (idx === -1) throw new Error("Todo not found");
+  
+  const newEntry = { subtask: timeline, isCompleted: true, time: Date.now() };
+  const updated: Todo = { 
+    ...todos[idx], 
+    timeline: [...(todos[idx].timeline || []), newEntry] 
+  };
+  
+  const next = [...todos];
+  next[idx] = updated;
+  saveTodosToStorage(next);
+  console.log(updated);
+} 
+
+export async function toggleTimelineSubtask(id: string, subtaskIndex: number): Promise<void> {
+  const todos = loadTodosFromStorage();
+  const idx = todos.findIndex((t) => t.id === id);
+  if (idx === -1) throw new Error("Todo not found");
+  
+  const updated: Todo = { 
+    ...todos[idx], 
+    timeline: todos[idx].timeline?.map((t) => 
+      t.time === subtaskIndex ? { ...t, isCompleted: !t.isCompleted } : t
+    ) 
+  };
+  
+  const next = [...todos];
+  next[idx] = updated;
+  saveTodosToStorage(next);
+  console.log(updated);
+}
+  
+
 
 

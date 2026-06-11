@@ -1,21 +1,28 @@
 "use client";
 
 import type { Todo } from "../../todo/types";
-import { CheckCircle2, Circle, Trash2, Calendar, Clock, AlertCircle } from "lucide-react";
+import { CheckCircle2, Circle, Trash2, Calendar, Clock, AlertCircle, Plus } from "lucide-react";
 
 export function TodoItem({
   todo,
   onToggle,
   onDelete,
   showCompleted,
-  showTarget
+  showTarget,
+  showTodo,
+  setShowTodo
 }: {
   todo: Todo;
   onToggle: () => void;
   onDelete: () => void;
   showCompleted: boolean;
   showTarget: boolean;
+  showTodo: string;
+  setShowTodo: (showTodo: string) => void;
+
 }) {
+  
+
   return (
     <li className={`group flex items-start sm:items-center justify-between gap-3 rounded-xl border px-4 py-3 transition-all ${
       todo.isDelayed && !todo.completed
@@ -97,6 +104,14 @@ export function TodoItem({
           aria-label="Delete todo"
         >
           <Trash2 className="h-4 w-4" />
+        </button>
+        <button
+          type="button"
+          onClick={() => setShowTodo(todo.id)}
+          className="rounded-full p-2 text-zinc-400 hover:bg-zinc-50 hover:text-zinc-600 transition-colors"
+          aria-label="Show todo details"
+        >
+          <Plus className="w-4 h-4"/>
         </button>
       </div>
     </li>

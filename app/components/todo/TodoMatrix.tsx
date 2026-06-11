@@ -2,7 +2,7 @@
 
 import type { Todo, TodoId } from "../../todo/types";
 import { TodoItem } from "./TodoItem";
-
+import {useState} from 'react'
 export function TodoMatrix({
   todos,
   isLoading,
@@ -25,7 +25,7 @@ export function TodoMatrix({
   const highPriority = todos.filter((t) => t.priority === "High");
   const mediumPriority = todos.filter((t) => t.priority === "Medium");
   const lowPriority = todos.filter((t) => t.priority === "Low" || !t.priority);
-
+  const [showTodo, setShowTodo] = useState<string>("")
   const Column = ({ title, items, colorClass }: { title: string, items: Todo[], colorClass: string }) => (
     <div className="flex flex-col gap-3 bg-zinc-50/50 p-4 rounded-xl border border-zinc-100">
       <div className="flex items-center justify-between mb-2">
@@ -46,6 +46,8 @@ export function TodoMatrix({
               onDelete={() => onDelete(t.id)}
               showCompleted = {false}
               showTarget = {false}
+              showTodo = {showTodo}
+              setShowTodo = {setShowTodo}
             />
           ))
         )}

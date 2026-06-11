@@ -22,6 +22,7 @@ export function loadTodosFromStorage(): Todo[] {
         targetDate: t.targetDate,
         targetTime: t.targetTime,
         isDelayed: t.isDelayed,
+        timeline: t.timeline
       }));
   } catch {
     return [];

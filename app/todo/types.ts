@@ -9,7 +9,12 @@ export type Todo = {
   priority: string;
   targetDate: string;
   targetTime: string;
-  isDelayed: boolean
+  isDelayed: boolean;
+  timeline?: {
+    subtask: string;
+    isCompleted: boolean;
+    time: number;
+  }[];
 };
 
 export type TodoFilter = "all" | "active" | "completed";
