@@ -6,10 +6,12 @@ export function TodoItem({
   todo,
   onToggle,
   onDelete,
+  showCompleted
 }: {
   todo: Todo;
   onToggle: () => void;
   onDelete: () => void;
+  showCompleted: boolean;
 }) {
   return (
     <li className="flex items-center justify-between gap-3 rounded-lg border bg-white px-3 py-2">
@@ -39,7 +41,7 @@ export function TodoItem({
           >
             {todo.text}
           </span>
-          {todo.completed && todo.completedAt && (
+          {todo.completed && todo.completedAt && showCompleted && (
             <span className="text-xs text-green-900 mt-0.5 italic font-light">
               Completed at: {new Date(todo.completedAt).toLocaleString()}
             </span>
