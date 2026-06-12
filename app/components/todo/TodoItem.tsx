@@ -1,7 +1,8 @@
 "use client";
 
+import toast from "react-hot-toast";
 import type { Todo } from "../../todo/types";
-import { CheckCircle2, Circle, Trash2, Calendar, Clock, AlertCircle, Plus } from "lucide-react";
+import { CheckCircle2, Circle, Trash2, Calendar, Clock, AlertCircle, Plus, MoveRight } from "lucide-react";
 
 export function TodoItem({
   todo,
@@ -21,8 +22,20 @@ export function TodoItem({
   setShowTodo: (showTodo: string) => void;
 
 }) {
-  
-
+  const subtasks = todo.timeline?.length || 0;
+  const allSubtaskCompleted = todo.timeline?.every((t) => t.isCompleted) || false;
+  const isButtonDisabled = subtasks > 0
+  const handleToggle = async () => {
+    if (allSubtaskCompleted){
+      toast.success("All Subtasks completed");
+      return;
+    }
+    if (isButtonDisabled) {
+      toast.error("Please complete the subtasks first");
+      return;
+    }
+    onToggle();
+  }
   return (
     <li className={`group flex items-start sm:items-center justify-between gap-3 rounded-xl border px-4 py-3 transition-all ${
       todo.isDelayed && !todo.completed
@@ -33,7 +46,7 @@ export function TodoItem({
       <div className="flex items-start sm:items-center gap-3 flex-1 min-w-0">
         <button
           type="button"
-          onClick={onToggle}
+          onClick={handleToggle}
           className="mt-0.5 sm:mt-0 flex-shrink-0"
           aria-label={todo.completed ? "Mark as active" : "Mark as completed"}
         >
@@ -52,7 +65,7 @@ export function TodoItem({
         
         <div className="flex flex-col gap-1 min-w-0">
           <span
-            onClick={onToggle}
+            onClick={handleToggle}
             className={`text-sm sm:text-base font-medium transition-colors cursor-pointer truncate ${
               todo.completed ? "text-zinc-400 line-through" : todo.isDelayed ? "text-red-900" : "text-zinc-700"
             }`}
@@ -111,7 +124,11 @@ export function TodoItem({
           className="rounded-full p-2 text-zinc-400 hover:bg-zinc-50 hover:text-zinc-600 transition-colors"
           aria-label="Show todo details"
         >
-          <Plus className="w-4 h-4"/>
+          {(subtasks === 0) ? (
+            <Plus className="h-4 w-4"/>
+          ) : (
+            <MoveRight className="h-4 w-4"/>
+          )}
         </button>
       </div>
     </li>

@@ -32,6 +32,7 @@ export async function addTodo(text: string, priority: string, targetDate:string,
     targetDate: targetDate,
     targetTime: targetTime,
     isDelayed: false,
+    completedSubtasksCount: 0
   };
   const next = [todo, ...todos];
   saveTodosToStorage(next);
@@ -97,10 +98,12 @@ export async function updateTimeline(id: string, timeline: string): Promise<void
   const idx = todos.findIndex((t) => t.id === id);
   if (idx === -1) throw new Error("Todo not found");
   
-  const newEntry = { subtask: timeline, isCompleted: true, time: Date.now() };
+  const newEntry = { subtask: timeline, isCompleted: false, time: Date.now() };
   const updated: Todo = { 
     ...todos[idx], 
-    timeline: [...(todos[idx].timeline || []), newEntry] 
+    timeline: [...(todos[idx].timeline || []), newEntry],
+    completed: false,
+    completedAt: undefined
   };
   
   const next = [...todos];
@@ -113,18 +116,37 @@ export async function toggleTimelineSubtask(id: string, subtaskIndex: number): P
   const todos = loadTodosFromStorage();
   const idx = todos.findIndex((t) => t.id === id);
   if (idx === -1) throw new Error("Todo not found");
-  
+  let totalSubtaskCompleted = 0;
   const updated: Todo = { 
     ...todos[idx], 
     timeline: todos[idx].timeline?.map((t) => 
       t.time === subtaskIndex ? { ...t, isCompleted: !t.isCompleted } : t
     ) 
   };
+  for(const timeline of updated.timeline!) {
+    if(timeline.isCompleted) {
+      totalSubtaskCompleted++;
+    }
+  }
+  const actualTotalSubtasks = updated.timeline?.length || 0;
   
+  const updated2: Todo = { 
+    ...updated, 
+    completedSubtasksCount: totalSubtaskCompleted
+  };
+  
+  if(totalSubtaskCompleted === actualTotalSubtasks && actualTotalSubtasks > 0) {
+    updated2.completed = true;
+    updated2.completedAt = Date.now();
+  }
+  if(totalSubtaskCompleted < actualTotalSubtasks) {
+    updated2.completed = false;
+    updated2.completedAt = undefined;
+  }
   const next = [...todos];
-  next[idx] = updated;
+  next[idx] = updated2;
   saveTodosToStorage(next);
-  console.log(updated);
+  console.log(updated2);
 }
   
 

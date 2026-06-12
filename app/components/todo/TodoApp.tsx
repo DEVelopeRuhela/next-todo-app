@@ -126,7 +126,7 @@ export default function TodoApp() {
         <div className="rounded-xl border bg-white p-6 shadow-lg sticky top-6 max-h-[calc(100vh-3rem)] overflow-y-auto flex flex-col">
           
           <div className="flex items-center justify-between mb-6 pb-4 border-b border-zinc-100 flex-shrink-0">
-            <h2 className="text-xl font-semibold text-zinc-800">Timeline</h2>
+            <h2 className="text-xl font-semibold text-zinc-800">Subtasks</h2>
             <button 
               onClick={() => setShowTodo("")} 
               className="p-2 hover:bg-zinc-100 rounded-full text-zinc-500 transition-colors"

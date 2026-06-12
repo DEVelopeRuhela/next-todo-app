@@ -15,6 +15,7 @@ export type Todo = {
     isCompleted: boolean;
     time: number;
   }[];
+  completedSubtasksCount: number;
 };
 
 export type TodoFilter = "all" | "active" | "completed";
