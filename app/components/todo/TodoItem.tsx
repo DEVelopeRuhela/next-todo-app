@@ -22,9 +22,11 @@ export function TodoItem({
   setShowTodo: (showTodo: string) => void;
 
 }) {
-  const subtasks = todo.timeline?.length || 0;
+  const subTasks = todo.timeline?.length || 0;
+  const countOfSubtaskCompleted = todo.timeline?.filter((t) => t.isCompleted).length || 0;
+  let percentageCompleted = (countOfSubtaskCompleted * 100) / subTasks;
   const allSubtaskCompleted = todo.timeline?.every((t) => t.isCompleted) || false;
-  const isButtonDisabled = subtasks > 0
+  const isButtonDisabled = subTasks > 0
   const handleToggle = async () => {
     if (allSubtaskCompleted){
       toast.success("All Subtasks completed");
@@ -97,6 +99,21 @@ export function TodoItem({
               </span>
             )}
           </div>
+          {subTasks > 0 && (
+            <div className="flex items-center gap-3 mt-1">
+              <div className="flex-1 h-1.5 bg-zinc-100 rounded-full overflow-hidden border border-zinc-200/50">
+                <div 
+                  className={`h-full rounded-full transition-all duration-500 ease-out ${
+                    percentageCompleted === 100 ? 'bg-emerald-500' : 'bg-blue-500'
+                  }`}
+                  style={{ width: `${percentageCompleted}%` }}
+                />
+              </div>
+              <span className="text-[10px] font-medium text-zinc-500 whitespace-nowrap">
+                {countOfSubtaskCompleted} / {subTasks}
+              </span>
+            </div>
+          )}
         </div>
       </div>
 
@@ -124,11 +141,12 @@ export function TodoItem({
           className="rounded-full p-2 text-zinc-400 hover:bg-zinc-50 hover:text-zinc-600 transition-colors"
           aria-label="Show todo details"
         >
-          {(subtasks === 0) ? (
+          {(subTasks === 0) ? (
             <Plus className="h-4 w-4"/>
           ) : (
             <MoveRight className="h-4 w-4"/>
           )}
+
         </button>
       </div>
     </li>
